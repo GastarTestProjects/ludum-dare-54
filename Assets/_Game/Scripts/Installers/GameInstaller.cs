@@ -20,6 +20,7 @@ namespace _Game.Scripts.Installers
             SignalBusInstaller.Install(Container);
             
             Container.DeclareSignal<PlayerDiedEvent>();
+            Container.DeclareSignal<PlayerInitializedEvent>();
             Container.DeclareSignal<PauseEvent>();
         }
     }
