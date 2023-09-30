@@ -13,11 +13,13 @@ namespace _Game.Scripts.Game.Player
         [SerializeField] private int maxHealth = 100;
 
         [Header("Refs")]
-        [SerializeField] private GameObject lookAtDebugObj;
+        [SerializeField] private GameObject ground;
+        [SerializeField] private GameObject mouseTargetDebugObj;
         [SerializeField] private Rigidbody playerRigidbody;
-        [SerializeField] private Transform playerHumanoid3d;
-        [SerializeField] private PlayerAnimations animations;
+        [SerializeField] private Transform playerVisuals;
         [SerializeField] private PlayerWeapon weapon;
+        [SerializeField] private PlayerAnimations animations;
+
         private bool _isDead;
         private int _currentHealth;
         private float _currentShootCooldown;
@@ -25,7 +27,9 @@ namespace _Game.Scripts.Game.Player
         [Inject]
         private SignalBus _signalBus;
         private Camera _camera;
-        private Plane _plane = new(Vector3.up, 0);
+        private Plane _targetPlane = new(Vector3.up, 0);
+        private Vector3 _surfaceNormal;
+        private bool _isGrounded;
 
         [Inject]
         private void Construct(PlayerInput playerInput, OtherInput otherInput)
@@ -42,12 +46,28 @@ namespace _Game.Scripts.Game.Player
             if (_isDead)
                 return;
 
-            RotateHumanoid();
+            RotateVisuals();
             var shootCooldownPassed = CheckShootCooldown();
             if (_playerInput.mousePressed && shootCooldownPassed)
                 Shoot();
             else
                 animations.PlayIdleAnimation();
+        }
+
+        private void OnCollisionStay(Collision collision)
+        {
+            // don't know if we even need this
+            
+            var innerIsGrounded = false;
+            // foreach (var contact in collision.contacts)
+            // {
+            //     if (contact.otherCollider.gameObject == ground.gameObject)
+            //     {
+            //         _surfaceNormal = contact.normal;
+            //         innerIsGrounded = true;
+            //     }
+            // }
+            _isGrounded = innerIsGrounded;
         }
 
         private void Initialize()
@@ -58,27 +78,27 @@ namespace _Game.Scripts.Game.Player
             _signalBus.Fire<PlayerInitializedEvent>();
         }
 
-        private void RotateHumanoid()
+        private void RotateVisuals()
         {
             var ray = _camera.ScreenPointToRay(_playerInput.mousePosition);
             var worldPosition = Vector3.zero;
-            if (_plane.Raycast(ray, out var distance))
+            if (_targetPlane.Raycast(ray, out var distance))
                 worldPosition = ray.GetPoint(distance);
 
             if (isDebug)
-                lookAtDebugObj.transform.position = worldPosition;
+                mouseTargetDebugObj.transform.position = worldPosition;
 
-            // local humanoid3d is rotated to look at worldPosition
-            var targetRotation = Quaternion.LookRotation(worldPosition - playerHumanoid3d.position);
-            // no rotation in x and z axis
-            targetRotation = Quaternion.Euler(0f, targetRotation.eulerAngles.y, 0f);
+            var up = Vector3.up;
+            var forward = worldPosition - transform.position;
+            forward = Vector3.ProjectOnPlane(forward, Vector3.up);
 
+            if (_isGrounded)
+                up = _surfaceNormal;
 
-            playerHumanoid3d.rotation = Quaternion.Slerp(
-                playerHumanoid3d.rotation,
-                targetRotation,
-                10 * Time.deltaTime);
+            var targetRotation = Quaternion.LookRotation(forward, up);
+            playerVisuals.rotation = Quaternion.Slerp(playerVisuals.rotation, targetRotation, Time.deltaTime * 10f);
         }
+
 
         private void CheckHealth()
         {
@@ -98,7 +118,6 @@ namespace _Game.Scripts.Game.Player
 
             return true;
         }
-
 
         private void Shoot()
         {
