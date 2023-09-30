@@ -1,4 +1,5 @@
 using _Game.Scripts.Game.Models;
+using _Game.Scripts.Game.Player;
 using UnityEngine;
 using Zenject;
 
