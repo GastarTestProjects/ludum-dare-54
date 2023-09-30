@@ -44,7 +44,10 @@ namespace _Game.Scripts.Game.Player
         {
             CheckHealth();
             if (_isDead)
+            {
+                animations.PlayDeathAnimation();
                 return;
+            }
 
             RotateVisuals();
             var shootCooldownPassed = CheckShootCooldown();
