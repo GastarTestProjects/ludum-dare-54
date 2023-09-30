@@ -4,11 +4,13 @@ namespace _Game.Scripts.Game.Events
     {
         public bool Paused;
         public bool PlayerDied;
-        
-        public PauseEvent(bool paused, bool playerDied)
+        public float PlayerTime;
+
+        public PauseEvent(bool paused, bool playerDied, float playerTime = 0f)
         {
             Paused = paused;
             PlayerDied = playerDied;
+            PlayerTime = playerTime;
         }
     }
 }

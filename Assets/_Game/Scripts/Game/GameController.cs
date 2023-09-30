@@ -23,27 +23,27 @@ namespace _Game.Scripts.Game
         {
             if (_otherInput.pausePressed)
             {
-                OnPausePressed();
+                if (Time.timeScale == 0)
+                    Unpause();
+                else
+                    Pause();
             }
         }
 
-        private void OnPausePressed()
+        public void Pause()
         {
-            if (Time.timeScale == 0)
-            {
-                Debug.Log("Unpause pressed");
-                Time.timeScale = 1;
-                _signalBus.Fire(new PauseEvent(false, false));
-                
-            }
-            else
-            {
-                Debug.Log("Pause pressed");
-                Time.timeScale = 0;
-                _signalBus.Fire(new PauseEvent(true, false));
-            }
+            Debug.Log("Pause pressed");
+            Time.timeScale = 0;
+            _signalBus.Fire(new PauseEvent(true, false));
         }
         
+        public void Unpause()
+        {
+            Debug.Log("Unpause pressed");
+            Time.timeScale = 1;
+            _signalBus.Fire(new PauseEvent(false, false));
+        }
+
         private void OnPlayerDied(PlayerDiedEvent playerDiedEvent)
         {
             Debug.Log("Player died");
