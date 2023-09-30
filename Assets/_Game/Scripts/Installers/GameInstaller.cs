@@ -7,7 +7,8 @@ namespace _Game.Scripts.Installers
     {
         public override void InstallBindings()
         {
-            Container.Bind<FullInput>().AsSingle();
+            Container.Bind<PlayerInput>().AsSingle();
+            Container.Bind<OtherInput>().AsSingle();
         }
     }
 }

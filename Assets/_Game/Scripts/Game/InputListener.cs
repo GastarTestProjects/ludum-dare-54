@@ -6,17 +6,21 @@ namespace _Game.Scripts.Game
 {
     public class InputListener : MonoBehaviour
     {
-        private FullInput _fullInput;
+        private OtherInput _otherInput;
+        private PlayerInput _playerInput;
 
         [Inject]
-        private void Construct(FullInput fullInput)
+        private void Construct(PlayerInput playerInput, OtherInput otherInput)
         {
-            _fullInput = fullInput;
+            _playerInput = playerInput;
+            _otherInput = otherInput;
         }
 
         private void Update()
         {
-            _fullInput.pausePressed = Input.GetKeyDown(KeyCode.Escape);
+            _otherInput.pausePressed = Input.GetKeyDown(KeyCode.Escape);
+            _playerInput.mousePosition = Input.mousePosition;
+            _playerInput.mousePressed = Input.GetMouseButton(0);
         }
     }
 }
