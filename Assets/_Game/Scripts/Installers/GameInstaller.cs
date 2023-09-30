@@ -1,3 +1,4 @@
+using _Game.Scripts.Game.Events;
 using _Game.Scripts.Game.Models;
 using _Game.Scripts.Game.Player;
 using Zenject;
@@ -19,6 +20,7 @@ namespace _Game.Scripts.Installers
             SignalBusInstaller.Install(Container);
             
             Container.DeclareSignal<PlayerDiedEvent>();
+            Container.DeclareSignal<PauseEvent>();
         }
     }
 }
