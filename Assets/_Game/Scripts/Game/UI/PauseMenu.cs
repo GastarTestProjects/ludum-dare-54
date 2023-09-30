@@ -1,6 +1,7 @@
 using _Game.Scripts.Game.Events;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Zenject;
 
@@ -53,6 +54,7 @@ namespace _Game.Scripts.Game.UI
         private void SubscribeButtons()
         {
             continueButton.onClick.AddListener(_gameController.Unpause);
+            mainMenuButton.onClick.AddListener(_gameController.OpenMainMenu);
             // TODO: Other buttons
         }
     }

@@ -44,6 +44,12 @@ namespace _Game.Scripts.Game
             _signalBus.Fire(new PauseEvent(false, false));
         }
 
+        public void OpenMainMenu()
+        {
+            Time.timeScale = 1f;
+            SceneLoader.Instance.LoadMenuScene();
+        }
+
         private void OnPlayerDied(PlayerDiedEvent playerDiedEvent)
         {
             Debug.Log("Player died");
