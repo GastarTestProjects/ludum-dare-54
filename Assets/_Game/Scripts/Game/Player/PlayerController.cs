@@ -129,5 +129,11 @@ namespace _Game.Scripts.Game.Player
             weapon.Shoot(playerRigidbody, shootForceMultiplier);
             animations.PlayShootAnimation();
         }
+        
+        public void TakeDamage(int damage)
+        {
+            _currentHealth -= damage;
+            // _signalBus.Fire(new PlayerTookDamageEvent(_currentHealth));
+        }
     }
 }
