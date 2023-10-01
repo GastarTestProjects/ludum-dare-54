@@ -439,7 +439,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89715ad69b973a14899afa2c6730b30b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scriptableObjectInstallers: []
+  _scriptableObjectInstallers:
+  - {fileID: 11400000, guid: cd59bec9e7e10914a83d103513cbae5a, type: 2}
   _monoInstallers:
   - {fileID: 901585668}
   _installerPrefabs: []
@@ -621,12 +622,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1994365467 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7223993472728169279, guid: f29d0a19fe25b454d924a7727d1c49c0,
-    type: 3}
-  m_PrefabInstance: {fileID: 5878139051320411676}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2036315116 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8491699999914868025, guid: f29d0a19fe25b454d924a7727d1c49c0,
@@ -826,7 +821,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Data.m_SourceObjects.m_Item0.transform
       value: 
-      objectReference: {fileID: 1994365467}
+      objectReference: {fileID: 0}
     - target: {fileID: 4856779839908212847, guid: f29d0a19fe25b454d924a7727d1c49c0,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -966,7 +961,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Data.m_SourceObjects.m_Item0.transform
       value: 
-      objectReference: {fileID: 1994365467}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -978,8 +973,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 410087041}
   - {fileID: 832575519}
-  - {fileID: 901585670}
   - {fileID: 1179025527}
+  - {fileID: 901585670}
   - {fileID: 5878139051320411676}
   - {fileID: 1770037740}
   - {fileID: 547003994}
