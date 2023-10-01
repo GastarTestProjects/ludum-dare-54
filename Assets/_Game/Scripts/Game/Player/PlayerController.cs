@@ -1,4 +1,5 @@
 using _Game.Scripts.Game.Models;
+using DG.Tweening;
 using UnityEngine;
 using Zenject;
 
@@ -13,6 +14,7 @@ namespace _Game.Scripts.Game.Player
         [SerializeField] private int maxHealth = 100;
 
         [Header("Refs")]
+        [SerializeField] private Transform cauldron;
         [SerializeField] private GameObject ground;
         [SerializeField] private GameObject mouseTargetDebugObj;
         [SerializeField] private Rigidbody playerRigidbody;
@@ -45,7 +47,6 @@ namespace _Game.Scripts.Game.Player
             CheckHealth();
             if (_isDead)
             {
-                animations.PlayDeathAnimation();
                 return;
             }
 
@@ -60,7 +61,7 @@ namespace _Game.Scripts.Game.Player
         private void OnCollisionStay(Collision collision)
         {
             // don't know if we even need this
-            
+
             var innerIsGrounded = false;
             // foreach (var contact in collision.contacts)
             // {
