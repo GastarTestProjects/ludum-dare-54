@@ -175,6 +175,9 @@ namespace _Game.Scripts.Player
 
         private void Shoot()
         {
+            if (_staminaHandler.IsHiding)
+                return;
+            
             _currentShootCooldown = shootCooldown;
             weapon.Shoot(playerRigidbody, shootForceMultiplier);
             animations.PlayShootAnimation();

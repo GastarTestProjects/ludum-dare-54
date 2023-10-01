@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using _Game.Scripts.Effects;
 using _Game.Scripts.Enemy;
 using _Game.Scripts.Player;
@@ -92,6 +93,8 @@ namespace _Game.Scripts.Enemies
         private void Die()
         {
             StopAllCoroutines();
+            if (_pool == null)
+                return;
             _pool.Despawn(this);
             var explosion = _explosionFactory.Create(new EnemyExplosionParams());
             explosion.transform.position = transform.position;
@@ -100,6 +103,16 @@ namespace _Game.Scripts.Enemies
                 _initParams.ExplosionDistance)
             {
                 _player.TakeDamage(_initParams.Damage);
+            }
+        }
+
+        private void OnCollisionEnter(Collision other)
+        {
+            if (other.gameObject.CompareTag("Player"))
+            {
+                var hitSpeed = _player.GetComponent<Rigidbody>().velocity.magnitude;
+                //Debug.Log("HitSpeed: " + hitSpeed);
+                TakeDamage((int) (hitSpeed / 5));
             }
         }
 
