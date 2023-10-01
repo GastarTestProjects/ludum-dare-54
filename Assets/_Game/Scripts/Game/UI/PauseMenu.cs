@@ -55,7 +55,7 @@ namespace _Game.Scripts.Game.UI
         {
             continueButton.onClick.AddListener(_gameController.Unpause);
             mainMenuButton.onClick.AddListener(_gameController.OpenMainMenu);
-            // TODO: Other buttons
+            restartButton.onClick.AddListener(_gameController.RestartGame);
         }
     }
 }

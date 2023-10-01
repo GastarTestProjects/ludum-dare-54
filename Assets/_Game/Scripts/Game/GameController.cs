@@ -2,6 +2,7 @@ using _Game.Scripts.Game.Events;
 using _Game.Scripts.Game.Models;
 using _Game.Scripts.Player;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Zenject;
 
 namespace _Game.Scripts.Game
@@ -48,6 +49,12 @@ namespace _Game.Scripts.Game
         {
             Time.timeScale = 1f;
             SceneLoader.Instance.LoadMenuScene();
+        }
+
+        public void RestartGame()
+        {
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         private void OnPlayerDied(PlayerDiedEvent playerDiedEvent)

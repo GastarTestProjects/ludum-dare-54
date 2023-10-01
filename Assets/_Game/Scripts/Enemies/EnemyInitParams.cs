@@ -4,7 +4,9 @@
     {
         public float Health;
         public float Speed;
-        public int damage;
+        public int Damage = 5;
+        public float ExplosionDistance = 1.5f;
+        public float AttackExplosionDelay = 0.1f;
         
         public EnemyInitParams(float health, float speed)
         {

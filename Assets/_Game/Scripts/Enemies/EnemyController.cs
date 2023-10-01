@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Collections;
+using _Game.Scripts.Effects;
 using _Game.Scripts.Enemy;
 using _Game.Scripts.Player;
 using UnityEngine;
@@ -15,22 +16,28 @@ namespace _Game.Scripts.Enemies
         private IMemoryPool _pool;
         private PlayerController _player;
         private Transform _playerTransform;
+        private EnemyExplosion.Factory _explosionFactory;
+        
+        private EnemyInitParams _initParams;
 
         private float _health;
-        private float _speed;
-        private int _damage;
-        
-        private EnemyBehaviour _behaviour;
+        // private float _speed;
+        // private int _damage;
+
+        // private EnemyBehaviour _behaviour;
         private bool attacking;
-        private float attackEndTime;
+        // private float attackEndTime;
 
         [Inject]
-        private void Construct(EnemyRegistry registry, PlayerController player)
+        private void Construct(EnemyRegistry registry,
+            PlayerController player,
+            EnemyExplosion.Factory explosionFactory)
         {
+            _explosionFactory = explosionFactory;
             _player = player;
             _playerTransform = _player.transform;
             _registry = registry;
-            _behaviour = new EnemyBehaviour(enemyAgent, Attack);
+            // _behaviour = new EnemyBehaviour(enemyAgent, Attack);
         }
         
         public void OnDespawned()
@@ -44,50 +51,56 @@ namespace _Game.Scripts.Enemies
         {
             _pool = pool;
             _health = initParams.Health;
-            _speed = initParams.Speed;
-            _damage = initParams.damage;
+            _initParams = initParams;
 
             enemyAgent.transform.position = new Vector3(0, 1, 0);
             enemyAgent.enabled = true;
-            enemyAgent.speed = 3;
+            enemyAgent.speed = _initParams.Speed;
 
             _registry.AddEnemy(this);
         }
 
         private void Update()
         {
-            // enemyAgent.SetDestination(_player.transform.position);
-            if (!attacking)
+            if (attacking)
+                return;
+            
+            if (Vector3.Distance(_playerTransform.position, enemyAgent.transform.position) <=
+                _initParams.ExplosionDistance)
             {
-                _behaviour.Tick(_playerTransform.position);
+                StartCoroutine(Attack());
             }
             else
             {
-                Attack();
+                enemyAgent.SetDestination(_playerTransform.position);
             }
         }
 
-        private void Attack()
+        private IEnumerator Attack()
         {
-            if (Time.time > attackEndTime)
-            {
-                attackEndTime = Time.time + 1;
-                _player.TakeDamage(_damage);
-            }
+            yield return new WaitForSeconds(_initParams.AttackExplosionDelay);
+            Die();
         }
         
         public void TakeDamage(int damage)
         {
             _health -= damage;
             if (_health <= 0)
-            {
                 Die();
-            }
         }
         
-        public void Die()
+        private void Die()
         {
+            StopAllCoroutines();
             _pool.Despawn(this);
+            var explosion = _explosionFactory.Create(new EnemyExplosionParams());
+            explosion.transform.position = transform.position;
+            
+            if (Vector3.Distance(_playerTransform.position, enemyAgent.transform.position) <=
+                _initParams.ExplosionDistance)
+            {
+                _player.TakeDamage(_initParams.Damage);
+            }
         }
 
 

@@ -15,9 +15,13 @@ MonoBehaviour:
   GameInstaller:
     enemyPrefab: {fileID: 669753498745126098, guid: 80b023cb376a3a345bf49d48431aa2f2,
       type: 3}
+    enemyExplosionPrefab: {fileID: 5468610566950683823, guid: 2849fcf788b4f0e49868a942b12e8fbe,
+      type: 3}
   EnemySpawner:
     startMaxEnemiesOnScreen: 8
     startSpawnDelay: 2
     startSpawnAmount: 3
     baseHealth: 1
     baseSpeed: 1
+  EnemyExplosion:
+    lifeTime: 1

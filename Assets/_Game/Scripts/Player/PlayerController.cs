@@ -107,8 +107,11 @@ namespace _Game.Scripts.Player
         {
             if (_currentHealth > 0)
                 return;
-            _isDead = true;
-            _signalBus.Fire<PlayerDiedEvent>();
+            if (!_isDead)
+            {
+                _isDead = true;
+                _signalBus.Fire<PlayerDiedEvent>();
+            }
         }
 
         private bool CheckShootCooldown()

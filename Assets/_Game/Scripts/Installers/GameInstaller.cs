@@ -1,4 +1,5 @@
 using System;
+using _Game.Scripts.Effects;
 using _Game.Scripts.Enemies;
 using _Game.Scripts.Enemy;
 using _Game.Scripts.Game.Events;
@@ -26,6 +27,13 @@ namespace _Game.Scripts.Installers
                     .FromComponentInNewPrefab(_config.enemyPrefab)
                     .UnderTransformGroup("Enemies"));
 
+            Container.BindFactory<EnemyExplosionParams, EnemyExplosion, EnemyExplosion.Factory>()
+                .FromPoolableMemoryPool<EnemyExplosionParams, EnemyExplosion, EnemyExplosionPool>(
+                    poolBinder => poolBinder
+                        .WithInitialSize(10)
+                        .FromComponentInNewPrefab(_config.enemyExplosionPrefab)
+                        .UnderTransformGroup("EnemyExplosions"));
+
             InstallEvents();
         }
 
@@ -43,10 +51,15 @@ namespace _Game.Scripts.Installers
         public class Config
         {
             public GameObject enemyPrefab;
+            public GameObject enemyExplosionPrefab;
         }
 
 
         class EnemyPool : MonoPoolableMemoryPool<EnemyInitParams, IMemoryPool, EnemyController>
+        {
+        }
+        
+        class EnemyExplosionPool : MonoPoolableMemoryPool<EnemyExplosionParams, IMemoryPool, EnemyExplosion>
         {
         }
     }
