@@ -1,7 +1,9 @@
 using _Game.Scripts.Enemies;
+using System;
 using _Game.Scripts.Game.Models;
 using UnityEngine;
 using Zenject;
+using Random = UnityEngine.Random;
 
 namespace _Game.Scripts.Player
 {
@@ -27,6 +29,8 @@ namespace _Game.Scripts.Player
         [Header("Sound")]
         [SerializeField] private AudioSource shotAudioSource;
         [SerializeField] private AudioClip shotAudioClip;
+        [SerializeField] private AudioSource frictionAudioSource;
+        [SerializeField] private AudioClip frictionAudioClip;
 
         private bool _isDead;
         private int _currentHealth;
@@ -53,6 +57,7 @@ namespace _Game.Scripts.Player
         private void Update()
         {
             CheckHealth();
+            ProcessMovement();
             if (_isDead)
             {
                 return;
@@ -111,6 +116,37 @@ namespace _Game.Scripts.Player
             playerVisuals.rotation = Quaternion.Slerp(playerVisuals.rotation, targetRotation, Time.deltaTime * 10f);
         }
 
+        private void ProcessMovement()
+        {
+            var currentHorizontalSpeed = Vector3.ProjectOnPlane(playerRigidbody.velocity, Vector3.up).magnitude;
+            const float maxVolSpeedThreshold = 6f;
+            const float minVolSpeedThreshold = 1f;
+            currentHorizontalSpeed = Mathf.Clamp(currentHorizontalSpeed, minVolSpeedThreshold, maxVolSpeedThreshold);
+            var volume = currentHorizontalSpeed / (maxVolSpeedThreshold - minVolSpeedThreshold);
+            frictionAudioSource.volume = volume;
+            if (Math.Abs(currentHorizontalSpeed - minVolSpeedThreshold) < .01f)
+            {
+                if (frictionAudioSource.isPlaying)
+                    frictionAudioSource.Pause();
+            }
+            else
+            {
+                if (!frictionAudioSource.isPlaying)
+                    frictionAudioSource.Play();
+            }
+            // Debug.Log($"Horizontal Speed: {currentHorizontalSpeed}");
+
+            // if (currentHorizontalSpeed > .5f)
+            // {
+            //     if (!frictionAudioSource.isPlaying)
+            //         frictionAudioSource.Play();
+            // }
+            // else
+            // {
+            //     if (frictionAudioSource.isPlaying)
+            //         frictionAudioSource.Pause();
+            // }
+        }
 
         private void CheckHealth()
         {
