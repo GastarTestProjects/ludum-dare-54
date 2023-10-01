@@ -43,10 +43,13 @@ namespace _Game.Scripts.Player
         private Vector3 _surfaceNormal;
         private bool _isGrounded;
         private EnemyRegistry _enemyRegistry;
+        private StaminaHandler _staminaHandler;
 
         [Inject]
-        private void Construct(PlayerInput playerInput, OtherInput otherInput, EnemyRegistry enemyRegistry)
+        private void Construct(PlayerInput playerInput, OtherInput otherInput, EnemyRegistry enemyRegistry,
+            StaminaHandler staminaHandler)
         {
+            _staminaHandler = staminaHandler;
             _enemyRegistry = enemyRegistry;
             _playerInput = playerInput;
             _camera = Camera.main;
@@ -201,9 +204,24 @@ namespace _Game.Scripts.Player
                 enemy.TakeDamage(damage);
             }
         }
+        
+        
+        public void Hide()
+        {
+            // TODO: Animation
+            Debug.Log("Hide");
+        }
+
+        public void Unhide()
+        {
+            // TODO: Animation
+            Debug.Log("Unhide");
+        }
 
         public void TakeDamage(int damage)
         {
+            if (_staminaHandler.IsHiding)
+                return; // TODO: Sound?
             _currentHealth -= damage;
             // _signalBus.Fire(new PlayerTookDamageEvent(_currentHealth));
         }

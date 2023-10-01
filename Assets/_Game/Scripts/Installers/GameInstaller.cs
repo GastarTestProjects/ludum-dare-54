@@ -20,6 +20,7 @@ namespace _Game.Scripts.Installers
             Container.Bind<PlayerInput>().AsSingle();
             Container.Bind<OtherInput>().AsSingle();
             Container.Bind<EnemyRegistry>().AsSingle();
+            Container.BindInterfacesAndSelfTo<StaminaHandler>().AsSingle();
 
             Container.BindFactory<EnemyInitParams, EnemyController, EnemyController.Factory>()
                 .FromPoolableMemoryPool<EnemyInitParams, EnemyController, EnemyPool>(poolBinder => poolBinder

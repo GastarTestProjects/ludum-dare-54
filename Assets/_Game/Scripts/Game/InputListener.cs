@@ -21,6 +21,7 @@ namespace _Game.Scripts.Game
             _otherInput.pausePressed = Input.GetKeyDown(KeyCode.Escape);
             _playerInput.mousePosition = Input.mousePosition;
             _playerInput.mousePressed = Input.GetMouseButton(0);
+            _playerInput.mouse2Pressed = Input.GetMouseButton(1);
         }
     }
 }

@@ -6,5 +6,6 @@ namespace _Game.Scripts.Game.Models
     {
         public Vector3 mousePosition;
         public bool mousePressed;
+        public bool mouse2Pressed;
     }
 }
