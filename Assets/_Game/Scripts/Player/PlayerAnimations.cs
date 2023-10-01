@@ -8,7 +8,8 @@ namespace _Game.Scripts.Player
 {
     public class PlayerAnimations : MonoBehaviour
     {
-        [SerializeField] private ParticleSystem shotParticles;
+        [SerializeField] private Transform shotParticlesSpawnPoint;
+        [SerializeField] private GameObject shotParticlesPrefab;
         [SerializeField] private AnimancerComponent animancerComponent;
         [SerializeField] private ClipTransition idleAnimation;
 
@@ -46,6 +47,12 @@ namespace _Game.Scripts.Player
                     .OnComplete(
                         () => { points.rigPoint.DOLocalRotateQuaternion(points.defaultLocalRotation, duration * 2f); });
             }
+
+            var spawnedParticles = Instantiate(
+                shotParticlesPrefab,
+                shotParticlesSpawnPoint.position,
+                shotParticlesSpawnPoint.rotation);
+            Destroy(spawnedParticles, 3);
         }
 
         public void PlayIdleAnimation()
