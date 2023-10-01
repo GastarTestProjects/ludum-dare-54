@@ -30,9 +30,16 @@ namespace _Game.Scripts.Installers
             Container.BindFactory<EnemyExplosionParams, EnemyExplosion, EnemyExplosion.Factory>()
                 .FromPoolableMemoryPool<EnemyExplosionParams, EnemyExplosion, EnemyExplosionPool>(
                     poolBinder => poolBinder
-                        .WithInitialSize(10)
+                        .WithInitialSize(5)
                         .FromComponentInNewPrefab(_config.enemyExplosionPrefab)
                         .UnderTransformGroup("EnemyExplosions"));
+            
+            Container.BindFactory<EnemySpawnPoint, EnemySpawnPoint.Factory>()
+                .FromPoolableMemoryPool<EnemySpawnPoint, EnemySpawnPointPool>(
+                    poolBinder => poolBinder
+                        .WithInitialSize(5)
+                        .FromComponentInNewPrefab(_config.enemySpawnPointPrefab)
+                        .UnderTransformGroup("EnemySpawnPoints"));
 
             InstallEvents();
         }
@@ -52,6 +59,7 @@ namespace _Game.Scripts.Installers
         {
             public GameObject enemyPrefab;
             public GameObject enemyExplosionPrefab;
+            public GameObject enemySpawnPointPrefab;
         }
 
 
@@ -60,6 +68,10 @@ namespace _Game.Scripts.Installers
         }
         
         class EnemyExplosionPool : MonoPoolableMemoryPool<EnemyExplosionParams, IMemoryPool, EnemyExplosion>
+        {
+        }
+        
+        class EnemySpawnPointPool : MonoPoolableMemoryPool<IMemoryPool, EnemySpawnPoint>
         {
         }
     }

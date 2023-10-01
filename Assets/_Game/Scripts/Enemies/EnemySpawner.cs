@@ -19,14 +19,21 @@ namespace _Game.Scripts.Enemies
         private EnemyRegistry _enemyRegistry;
         [Inject]
         private EnemyController.Factory _enemyFactory;
+        [Inject]
+        private EnemySpawnPoint.Factory _spawnPointFactory;
 
-        private float prevSpawnTime;
+        private float nextSpawnTime;
+
+        private void Start()
+        {
+            nextSpawnTime = Time.time + _config.firstSpawnDelay;
+        }
 
         private void Update()
         {
-            if (Time.time - prevSpawnTime > 1f)
+            if (Time.time > nextSpawnTime)
             {
-                prevSpawnTime = Time.time;
+                nextSpawnTime = Time.time + _config.startSpawnDelay;
                 if (_enemyRegistry.Enemies.Count < _config.startMaxEnemiesOnScreen)
                 {
                     SpawnEnemies();
@@ -39,9 +46,12 @@ namespace _Game.Scripts.Enemies
             for (int i = 0; i < _config.startSpawnAmount; i++)
             {
                 var spawnPosition = GetRandomSpawnPosition();
-                var enemy = _enemyFactory.Create(
-                    new EnemyInitParams(_config.baseHealth, _config.baseSpeed));
-                enemy.transform.position = spawnPosition;
+                // var enemy = _enemyFactory.Create(
+                //     new EnemyInitParams(_config.baseHealth, _config.baseSpeed));
+                var spawnPoint = _spawnPointFactory.Create();
+                spawnPoint.transform.position = spawnPosition;
+                spawnPoint.SetSpawnFinishListener(OnSpawnPointFinish);
+                // enemy.transform.position = spawnPosition;
             }
         }
         
@@ -55,11 +65,22 @@ namespace _Game.Scripts.Enemies
             );
             return spawnPosition;
         }
+
+        private void OnSpawnPointFinish(EnemySpawnPoint spawnPoint)
+        {
+            if (Vector3.Distance(_player.transform.position, spawnPoint.transform.position) > 1f)
+            {
+                var enemy = _enemyFactory.Create(
+                    new EnemyInitParams(_config.baseHealth, _config.baseSpeed));
+                enemy.transform.position = spawnPoint.transform.position;
+            }
+        }
         
 
         [Serializable]
         public class Config
         {
+            public float firstSpawnDelay = 1f;
             public float startMaxEnemiesOnScreen = 8;
             public float startSpawnDelay = 2;
             public float startSpawnAmount = 3;

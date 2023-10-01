@@ -11,6 +11,7 @@ namespace _Game.Scripts.Installers
         public GameInstaller.Config GameInstaller;
         public EnemySpawner.Config EnemySpawner;
         public EnemyExplosion.Config EnemyExplosion;
+        public EnemySpawnPoint.Config EnemySpawnPoint;
         
         
         public override void InstallBindings()
@@ -18,6 +19,7 @@ namespace _Game.Scripts.Installers
             Container.BindInstance(GameInstaller).IfNotBound();
             Container.BindInstance(EnemySpawner).IfNotBound();
             Container.BindInstance(EnemyExplosion).IfNotBound();
+            Container.BindInstance(EnemySpawnPoint).IfNotBound();
         }
     }
 }
