@@ -20,6 +20,9 @@ namespace _Game.Scripts.Player
         [SerializeField] private Transform playerVisuals;
         [SerializeField] private PlayerWeapon weapon;
         [SerializeField] private PlayerAnimations animations;
+        [Header("Sound")]
+        [SerializeField] private AudioSource shotAudioSource;
+        [SerializeField] private AudioClip shotAudioClip;
 
         private bool _isDead;
         private int _currentHealth;
@@ -130,8 +133,14 @@ namespace _Game.Scripts.Player
             _currentShootCooldown = shootCooldown;
             weapon.Shoot(playerRigidbody, shootForceMultiplier);
             animations.PlayShootAnimation();
+
+            // sound
+            var volume = Random.Range(0.9f, 1.1f);
+            var pitch = Random.Range(.9f, 1.1f);
+            shotAudioSource.pitch = pitch;
+            shotAudioSource.PlayOneShot(shotAudioClip, volume);
         }
-        
+
         public void TakeDamage(int damage)
         {
             _currentHealth -= damage;
