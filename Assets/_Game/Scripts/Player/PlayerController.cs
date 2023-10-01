@@ -1,3 +1,4 @@
+using _Game.Scripts.Enemies;
 using _Game.Scripts.Game.Models;
 using UnityEngine;
 using Zenject;
@@ -11,6 +12,9 @@ namespace _Game.Scripts.Player
         [SerializeField] private float shootCooldown = 0.5f;
         [SerializeField] private float shootForceMultiplier = 10f;
         [SerializeField] private int maxHealth = 100;
+        [SerializeField] private float shotDistance = 10;
+        [SerializeField] private float shotAngle = 30;
+        [SerializeField] private int damage = 5;
 
         [Header("Refs")]
         [SerializeField] private Transform cauldron;
@@ -34,10 +38,12 @@ namespace _Game.Scripts.Player
         private Plane _targetPlane = new(Vector3.up, 0);
         private Vector3 _surfaceNormal;
         private bool _isGrounded;
+        private EnemyRegistry _enemyRegistry;
 
         [Inject]
-        private void Construct(PlayerInput playerInput, OtherInput otherInput)
+        private void Construct(PlayerInput playerInput, OtherInput otherInput, EnemyRegistry enemyRegistry)
         {
+            _enemyRegistry = enemyRegistry;
             _playerInput = playerInput;
             _camera = Camera.main;
             animations.PlayIdleAnimation();
@@ -139,6 +145,25 @@ namespace _Game.Scripts.Player
             var pitch = Random.Range(.9f, 1.1f);
             shotAudioSource.pitch = pitch;
             shotAudioSource.PlayOneShot(shotAudioClip, volume);
+            
+            DamageEnemies();
+        }
+
+        private void DamageEnemies()
+        {
+            for (var i = _enemyRegistry.Enemies.Count - 1; i >= 0; i--)
+            {
+                var enemy = _enemyRegistry.Enemies[i];
+                var distance = Vector3.Distance(enemy.transform.position, transform.position);
+                if (distance > shotDistance)
+                    continue;
+                var angle = Vector3.Angle(
+                    enemy.transform.position - transform.position,
+                    playerVisuals.forward);
+                if (angle > shotAngle)
+                    continue;
+                enemy.TakeDamage(damage);
+            }
         }
 
         public void TakeDamage(int damage)
