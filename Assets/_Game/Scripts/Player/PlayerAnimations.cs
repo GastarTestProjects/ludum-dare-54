@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using Animancer;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace _Game.Scripts.Game.Player
+namespace _Game.Scripts.Player
 {
     public class PlayerAnimations : MonoBehaviour
     {

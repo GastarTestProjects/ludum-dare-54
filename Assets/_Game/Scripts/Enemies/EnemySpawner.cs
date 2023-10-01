@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection.Emit;
 using _Game.Scripts.Enemy;
-using _Game.Scripts.Game.Player;
+using _Game.Scripts.Player;
 using UnityEngine;
 using Zenject;
 

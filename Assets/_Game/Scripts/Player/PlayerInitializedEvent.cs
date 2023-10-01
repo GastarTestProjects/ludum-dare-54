@@ -1,4 +1,4 @@
-namespace _Game.Scripts.Game.Player
+namespace _Game.Scripts.Player
 {
     public class PlayerInitializedEvent
     {

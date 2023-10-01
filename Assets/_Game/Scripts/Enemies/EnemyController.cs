@@ -1,6 +1,6 @@
 ﻿using System;
 using _Game.Scripts.Enemy;
-using _Game.Scripts.Game.Player;
+using _Game.Scripts.Player;
 using UnityEngine;
 using UnityEngine.AI;
 using Zenject;

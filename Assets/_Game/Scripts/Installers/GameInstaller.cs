@@ -3,7 +3,7 @@ using _Game.Scripts.Enemies;
 using _Game.Scripts.Enemy;
 using _Game.Scripts.Game.Events;
 using _Game.Scripts.Game.Models;
-using _Game.Scripts.Game.Player;
+using _Game.Scripts.Player;
 using UnityEngine;
 using Zenject;
 

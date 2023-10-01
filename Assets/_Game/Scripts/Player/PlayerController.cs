@@ -1,9 +1,8 @@
 using _Game.Scripts.Game.Models;
-using DG.Tweening;
 using UnityEngine;
 using Zenject;
 
-namespace _Game.Scripts.Game.Player
+namespace _Game.Scripts.Player
 {
     public class PlayerController : MonoBehaviour
     {
