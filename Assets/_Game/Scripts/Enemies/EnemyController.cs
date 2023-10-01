@@ -14,15 +14,23 @@ namespace _Game.Scripts.Enemies
         private EnemyRegistry _registry;
         private IMemoryPool _pool;
         private PlayerController _player;
+        private Transform _playerTransform;
 
         private float _health;
         private float _speed;
+        private int _damage;
+        
+        private EnemyBehaviour _behaviour;
+        private bool attacking;
+        private float attackEndTime;
 
         [Inject]
         private void Construct(EnemyRegistry registry, PlayerController player)
         {
             _player = player;
+            _playerTransform = _player.transform;
             _registry = registry;
+            _behaviour = new EnemyBehaviour(enemyAgent, Attack);
         }
         
         public void OnDespawned()
@@ -37,6 +45,7 @@ namespace _Game.Scripts.Enemies
             _pool = pool;
             _health = initParams.Health;
             _speed = initParams.Speed;
+            _damage = initParams.damage;
 
             enemyAgent.transform.position = new Vector3(0, 1, 0);
             enemyAgent.enabled = true;
@@ -47,7 +56,38 @@ namespace _Game.Scripts.Enemies
 
         private void Update()
         {
-            enemyAgent.SetDestination(_player.transform.position);
+            // enemyAgent.SetDestination(_player.transform.position);
+            if (!attacking)
+            {
+                _behaviour.Tick(_playerTransform.position);
+            }
+            else
+            {
+                Attack();
+            }
+        }
+
+        private void Attack()
+        {
+            if (Time.time > attackEndTime)
+            {
+                attackEndTime = Time.time + 1;
+                _player.TakeDamage(_damage);
+            }
+        }
+        
+        public void TakeDamage(int damage)
+        {
+            _health -= damage;
+            if (_health <= 0)
+            {
+                Die();
+            }
+        }
+        
+        public void Die()
+        {
+            _pool.Despawn(this);
         }
 
 

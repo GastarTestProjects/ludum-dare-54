@@ -4,6 +4,7 @@
     {
         public float Health;
         public float Speed;
+        public int damage;
         
         public EnemyInitParams(float health, float speed)
         {

@@ -5,7 +5,6 @@ using _Game.Scripts.Game.Events;
 using _Game.Scripts.Game.Models;
 using _Game.Scripts.Game.Player;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Zenject;
 
 namespace _Game.Scripts.Installers
