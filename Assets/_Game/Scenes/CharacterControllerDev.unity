@@ -699,6 +699,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8491699999914868025, guid: f29d0a19fe25b454d924a7727d1c49c0,
         type: 3}
+      propertyPath: ground
+      value: 
+      objectReference: {fileID: 547003990}
+    - target: {fileID: 8491699999914868025, guid: f29d0a19fe25b454d924a7727d1c49c0,
+        type: 3}
       propertyPath: shotAudioClip
       value: 
       objectReference: {fileID: 8300000, guid: 9219f1037779a481f9ece41076819d22, type: 3}
@@ -710,7 +715,7 @@ PrefabInstance:
     - target: {fileID: 8491699999914868025, guid: f29d0a19fe25b454d924a7727d1c49c0,
         type: 3}
       propertyPath: shootForceMultiplier
-      value: 800
+      value: 1000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
