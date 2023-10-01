@@ -2,6 +2,13 @@
 {
     public class EnemyInitParams
     {
+        public float Health;
+        public float Speed;
         
+        public EnemyInitParams(float health, float speed)
+        {
+            Health = health;
+            Speed = speed;
+        }
     }
 }
