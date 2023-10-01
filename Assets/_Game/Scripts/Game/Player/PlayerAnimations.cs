@@ -9,6 +9,7 @@ namespace _Game.Scripts.Game.Player
 {
     public class PlayerAnimations : MonoBehaviour
     {
+        [SerializeField] private ParticleSystem shotParticles;
         [SerializeField] private AnimancerComponent animancerComponent;
         [SerializeField] private ClipTransition idleAnimation;
 
