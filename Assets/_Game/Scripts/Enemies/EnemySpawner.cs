@@ -23,10 +23,16 @@ namespace _Game.Scripts.Enemies
         private EnemySpawnPoint.Factory _spawnPointFactory;
 
         private float nextSpawnTime;
+        
+        private float maxEnemies;
+        private float spawnAmount;
+        
 
         private void Start()
         {
             nextSpawnTime = Time.time + _config.firstSpawnDelay;
+            maxEnemies = _config.startMaxEnemiesOnScreen;
+            spawnAmount = _config.startSpawnAmount;
         }
 
         private void Update()
@@ -34,16 +40,19 @@ namespace _Game.Scripts.Enemies
             if (Time.time > nextSpawnTime)
             {
                 nextSpawnTime = Time.time + _config.startSpawnDelay;
-                if (_enemyRegistry.Enemies.Count < _config.startMaxEnemiesOnScreen)
+                if (_enemyRegistry.Enemies.Count < maxEnemies)
                 {
                     SpawnEnemies();
                 }
             }
+            
+            spawnAmount += _config.spawnAmountIncrease * Time.deltaTime;
+            maxEnemies += _config.maxEnemiesIncrease * Time.deltaTime;
         }
         
         public void SpawnEnemies()
         {
-            for (int i = 0; i < _config.startSpawnAmount; i++)
+            for (int i = 0; i < spawnAmount; i++)
             {
                 var spawnPosition = GetRandomSpawnPosition();
                 // var enemy = _enemyFactory.Create(
@@ -68,7 +77,7 @@ namespace _Game.Scripts.Enemies
 
         private void OnSpawnPointFinish(EnemySpawnPoint spawnPoint)
         {
-            if (Vector3.Distance(_player.transform.position, spawnPoint.transform.position) > 1f)
+            if (Vector3.Distance(_player.transform.position, spawnPoint.transform.position) > 2f)
             {
                 var enemy = _enemyFactory.Create(
                     new EnemyInitParams(_config.baseHealth, _config.baseSpeed));
@@ -84,6 +93,10 @@ namespace _Game.Scripts.Enemies
             public float startMaxEnemiesOnScreen = 8;
             public float startSpawnDelay = 2;
             public float startSpawnAmount = 3;
+            
+            [Header("Increase per second")]
+            public float maxEnemiesIncrease = 0.1f;
+            public float spawnAmountIncrease = 0.15f;
 
             [Header("Base enemy stats")]
             public float baseHealth = 1;

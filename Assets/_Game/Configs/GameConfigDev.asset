@@ -20,13 +20,16 @@ MonoBehaviour:
     enemySpawnPointPrefab: {fileID: 6062231844647329877, guid: 755eec4f84a12cc468d776ba5e5b4dff,
       type: 3}
   EnemySpawner:
+    firstSpawnDelay: 1
     startMaxEnemiesOnScreen: 8
     startSpawnDelay: 2
     startSpawnAmount: 3
+    maxEnemiesIncrease: 0.1
+    spawnAmountIncrease: 0.15
     baseHealth: 1
-    baseSpeed: 1
+    baseSpeed: 3
   EnemyExplosion:
     lifeTime: 1
   EnemySpawnPoint:
-    spawnDelay: 1
-    spawnDelayRandomness: 0.1
+    spawnDelay: 1.2
+    spawnDelayRandomness: 0.3
