@@ -77,6 +77,7 @@ namespace _Game.Scripts.Player
         {
             var ray = mainCam.ScreenPointToRay(_playerInput.mousePosition);
             var worldPosition = Vector3.zero;
+            _targetPlane.distance = -transform.position.y;
             if (_targetPlane.Raycast(ray, out var distance))
                 worldPosition = ray.GetPoint(distance);
 
