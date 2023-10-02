@@ -33,3 +33,15 @@ MonoBehaviour:
   EnemySpawnPoint:
     spawnDelay: 1.2
     spawnDelayRandomness: 0.3
+  StaminaHandler:
+    maxStamina: 1
+    costPerSecond: 0.5
+    regenPerSecond: 0.2
+    regenDelay: 5
+    minDurationAmount: 0.5
+  BombSpawner:
+    bombSpawnDelay: 6
+    bombSpawnDelayRandomness: 1
+  Bomb:
+    delayBeforeBombDrop: 2
+    bombElevation: 10

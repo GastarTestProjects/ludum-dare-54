@@ -173,13 +173,12 @@ namespace _Game.Scripts.Player
 
         public void Hide()
         {
-            Debug.Log("Hide");
             animations.AnimateHide();
+            playerRigidbody.velocity *= 1.5f;
         }
 
         public void Unhide()
         {
-            Debug.Log("UN Hide");
             animations.AnimateUnHide();
         }
 
