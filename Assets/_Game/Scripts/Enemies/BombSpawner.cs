@@ -15,6 +15,7 @@ namespace _Game.Scripts.Enemies
 
         private float _nextSpawnTime;
 
+        [Inject]
         public void Construct(Config config, Bomb.Factory bombFactory, PlayerController player)
         {
             _config = config;

@@ -28,7 +28,7 @@ MonoBehaviour:
     <Damage>k__BackingField: 5
     <HideSpeedMultiplier>k__BackingField: 1.5
   EnemySpawner:
-    firstSpawnDelay: 1
+    firstSpawnDelay: 1.03
     startMaxEnemiesOnScreen: 8
     startSpawnDelay: 2
     startSpawnAmount: 3
