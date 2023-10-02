@@ -13,9 +13,7 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - IS_ICE
-  - USE_AL
   - USE_FOG
-  - USE_LS
   - USE_RT
   - USE_WC
   m_InvalidKeywords:
@@ -361,9 +359,9 @@ Material:
     - _USEWT: 0
     - _UVSec: 0
     - _UpVector: 1
-    - _UseAmbientLight: 1
+    - _UseAmbientLight: 0
     - _UsePR: 0
-    - _UseSunReflection: 1
+    - _UseSunReflection: 0
     - _UseVR: 0
     - _WireframeSmoothing: 1
     - _WireframeThickness: 1

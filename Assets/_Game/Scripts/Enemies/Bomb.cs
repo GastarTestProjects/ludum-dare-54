@@ -12,7 +12,7 @@ namespace _Game.Scripts.Enemies
     public class Bomb : MonoBehaviour, IPoolable<IMemoryPool>
     {
         [SerializeField] private BombObject bombObject;
-        [SerializeField] private DecalProjector aimSpot;
+        [SerializeField] private GameObject aimSpot;
         
         private Config _config;
         private EnemyExplosion.Factory _explosionFactory;
@@ -40,7 +40,7 @@ namespace _Game.Scripts.Enemies
         public void OnSpawned(IMemoryPool pool)
         {
             _pool = pool;
-            aimSpot.enabled = true;
+            aimSpot.SetActive(true);
             bombObject.gameObject.SetActive(false);
 
             var aimSpotTransform = aimSpot.transform;
