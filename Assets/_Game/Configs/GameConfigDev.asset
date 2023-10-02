@@ -55,3 +55,8 @@ MonoBehaviour:
   Bomb:
     delayBeforeBombDrop: 2
     bombElevation: 10
+    explosionDamageDistance: 2.5
+    damage: 20
+  EnemyController:
+    explosionDistance: 2
+    attackExplosionDelay: 0.2
