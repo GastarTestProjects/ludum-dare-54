@@ -211,14 +211,12 @@ namespace _Game.Scripts.Player
         
         public void Hide()
         {
-            // TODO: Animation
-            Debug.Log("Hide");
+            animations.AnimateHide();
         }
 
         public void Unhide()
         {
-            // TODO: Animation
-            Debug.Log("Unhide");
+            animations.AnimateUnHide();
         }
 
         public void TakeDamage(int damage)

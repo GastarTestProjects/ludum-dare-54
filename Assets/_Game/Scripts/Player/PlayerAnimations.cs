@@ -59,6 +59,16 @@ namespace _Game.Scripts.Player
         {
             animancerComponent.Play(idleAnimation);
         }
+
+        public void AnimateHide()
+        {
+            
+        }
+
+        public void AnimateUnHide()
+        {
+            
+        }
     }
 
     [Serializable]
