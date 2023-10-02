@@ -13,11 +13,13 @@ MonoBehaviour:
   m_Name: GameConfigDev
   m_EditorClassIdentifier: 
   GameInstaller:
-    enemyPrefab: {fileID: 669753498745126098, guid: 80b023cb376a3a345bf49d48431aa2f2,
+    enemyPrefab: {fileID: 1818861082154570, guid: 4e520102808c197418cb9b5fde154879,
       type: 3}
     enemyExplosionPrefab: {fileID: 5468610566950683823, guid: 2849fcf788b4f0e49868a942b12e8fbe,
       type: 3}
     enemySpawnPointPrefab: {fileID: 6062231844647329877, guid: 755eec4f84a12cc468d776ba5e5b4dff,
+      type: 3}
+    bombPrefab: {fileID: 7437776919945300398, guid: cef8c6d8662120b46b0805155f2a1e84,
       type: 3}
   PlayerController:
     <ShootCooldown>k__BackingField: 0.5
