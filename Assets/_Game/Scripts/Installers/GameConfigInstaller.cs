@@ -14,6 +14,8 @@ namespace _Game.Scripts.Installers
         public EnemyExplosion.Config EnemyExplosion;
         public EnemySpawnPoint.Config EnemySpawnPoint;
         public StaminaHandler.Config StaminaHandler;
+        public BombSpawner.Config BombSpawner;
+        public Bomb.Config Bomb;
         
         
         public override void InstallBindings()
@@ -23,6 +25,8 @@ namespace _Game.Scripts.Installers
             Container.BindInstance(EnemyExplosion).IfNotBound();
             Container.BindInstance(EnemySpawnPoint).IfNotBound();
             Container.BindInstance(StaminaHandler).IfNotBound();
+            Container.BindInstance(BombSpawner).IfNotBound();
+            Container.BindInstance(Bomb).IfNotBound();
         }
     }
 }
