@@ -1083,21 +1083,22 @@ MonoBehaviour:
     _Speed: 1
     _NormalizedStartTime: NaN
   recoilPoints:
-  - rigPoint: {fileID: 193044395328524896}
-    defaultLocalPosition: {x: 0, y: 0, z: 0}
+  - defaultLocalPosition: {x: 0, y: 0, z: 0}
     defaultLocalRotation: {x: 0, y: 0, z: 0, w: 0}
-    recoilPoints:
+    rigPoint: {fileID: 193044395328524896}
+    customTargetPoints:
     - {fileID: 9098255711670784914}
     - {fileID: 5746388775223994628}
     - {fileID: 1857436760005266980}
     - {fileID: 4501159770934342632}
-  - rigPoint: {fileID: 4856779839908212847}
-    defaultLocalPosition: {x: 0, y: 0, z: 0}
+  - defaultLocalPosition: {x: 0, y: 0, z: 0}
     defaultLocalRotation: {x: 0, y: 0, z: 0, w: 0}
-    recoilPoints:
+    rigPoint: {fileID: 4856779839908212847}
+    customTargetPoints:
     - {fileID: 4106775527048541543}
     - {fileID: 436411334084525438}
     - {fileID: 1783168643170758696}
+  hidePoints: []
 --- !u!1 &6098754053787975444
 GameObject:
   m_ObjectHideFlags: 0

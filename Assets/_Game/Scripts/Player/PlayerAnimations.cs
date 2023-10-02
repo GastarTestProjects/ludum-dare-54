@@ -76,20 +76,50 @@ namespace _Game.Scripts.Player
         {
             foreach (var points in hidePoints)
                 points.rigPoint.DOKill();
+
+            const float duration = .13f;
+            foreach (var points in hidePoints)
+            {
+                points.rigPoint.DOLocalMove(points.customTargetPoints[0].localPosition, duration)
+                    .SetEase(Ease.OutQuad);
+                points.rigPoint.DOLocalRotateQuaternion(points.customTargetPoints[0].localRotation, duration);
+            }
         }
 
         public void AnimateUnHide()
         {
             foreach (var points in hidePoints)
                 points.rigPoint.DOKill();
+
+            const float duration = .35f;
+            foreach (var points in hidePoints)
+            {
+                points.rigPoint.DOLocalMove(points.defaultLocalPosition, duration)
+                    .SetEase(Ease.OutQuad);
+                points.rigPoint.DOLocalRotateQuaternion(points.defaultLocalRotation, duration);
+            }
         }
 
         public void SetDefaultRigPointsState()
         {
+            if (!_isInitDefaultRecoilPoints)
+                InitDefaultRigPoints();
             foreach (var points in recoilPoints)
                 points.rigPoint.DOKill();
             foreach (var points in hidePoints)
                 points.rigPoint.DOKill();
+
+            foreach (var points in recoilPoints)
+            {
+                points.rigPoint.localPosition = points.defaultLocalPosition;
+                points.rigPoint.localRotation = points.defaultLocalRotation;
+            }
+
+            foreach (var points in hidePoints)
+            {
+                points.rigPoint.localPosition = points.defaultLocalPosition;
+                points.rigPoint.localRotation = points.defaultLocalRotation;
+            }
         }
     }
 
