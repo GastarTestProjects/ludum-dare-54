@@ -66,6 +66,11 @@ namespace _Game.Scripts.Player
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.J))
+                TempMusicManager.Instance.PlayMenuMusic();
+            if (Input.GetKeyDown(KeyCode.K))
+                TempMusicManager.Instance.PlayGameMusic();
+            
             PlayMovementSounds();
             CheckHealth();
             if (_isDead)
@@ -162,7 +167,7 @@ namespace _Game.Scripts.Player
 
             // sound
             var volume = Random.Range(0.9f, 1.1f);
-            var pitch = Random.Range(.9f, 1.1f);
+            var pitch = Random.Range(.7f, .9f);
             shotAudioSource.pitch = pitch;
             shotAudioSource.PlayOneShot(shotAudioClip, volume);
 

@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,7 +8,7 @@ namespace _Game.Scripts.Game
     public class SceneLoader : MonoBehaviour
     {
         public static SceneLoader Instance;
-        
+
         [SerializeField] private CanvasGroup loadingPanel;
         [SerializeField] private float fadeTime = 0.2f;
 
@@ -21,8 +22,11 @@ namespace _Game.Scripts.Game
             else
             {
                 DestroyImmediate(this);
+                return;
             }
+
             loadingPanel.gameObject.SetActive(false);
+            TempMusicManager.Instance.PlayMenuMusic();
         }
 
         public void LoadMenuScene()
@@ -33,10 +37,13 @@ namespace _Game.Scripts.Game
                 .OnComplete(
                     () =>
                     {
-                        StartLoading("_Game/Scenes/MainMenuScene", "_Game/Scenes/GameScene");
+                        StartLoading(
+                            "_Game/Scenes/MainMenuScene",
+                            "_Game/Scenes/GameScene",
+                            () => { TempMusicManager.Instance.PlayMenuMusic(); });
                     });
         }
-        
+
         public void LoadGameScene()
         {
             loadingPanel.gameObject.SetActive(true);
@@ -45,21 +52,27 @@ namespace _Game.Scripts.Game
                 .OnComplete(
                     () =>
                     {
-                        StartLoading("_Game/Scenes/GameScene", "_Game/Scenes/MainMenuScene");
+                        StartLoading(
+                            "_Game/Scenes/GameScene",
+                            "_Game/Scenes/MainMenuScene",
+                            () => { TempMusicManager.Instance.PlayGameMusic(); });
                     });
         }
 
-        private void StartLoading(string sceneName, string unloadSceneName)
+        private void StartLoading(string sceneName, string unloadSceneName, Action onComplete)
         {
             var operation = SceneManager.LoadSceneAsync(sceneName);
             operation.completed += _ =>
             {
                 // loaderPanel.transform.DOKill();
-                loadingPanel.DOFade(0, fadeTime).OnComplete(() =>
-                {
-                    loadingPanel.gameObject.SetActive(false);
-                    SceneManager.UnloadSceneAsync(unloadSceneName);
-                });
+                loadingPanel.DOFade(0, fadeTime)
+                    .OnComplete(
+                        () =>
+                        {
+                            loadingPanel.gameObject.SetActive(false);
+                            SceneManager.UnloadSceneAsync(unloadSceneName);
+                        });
+                onComplete?.Invoke();
             };
         }
     }
