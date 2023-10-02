@@ -22,8 +22,8 @@ MonoBehaviour:
     bombPrefab: {fileID: 7437776919945300398, guid: cef8c6d8662120b46b0805155f2a1e84,
       type: 3}
   PlayerController:
-    <ShootCooldown>k__BackingField: 0.8
-    <ShootForceMultiplier>k__BackingField: 1600
+    <ShootCooldown>k__BackingField: 0.5
+    <ShootForceMultiplier>k__BackingField: 1000
     <MaxHealth>k__BackingField: 100
     <ShotDistance>k__BackingField: 7
     <ShotAngle>k__BackingField: 30
@@ -32,10 +32,10 @@ MonoBehaviour:
   EnemySpawner:
     firstSpawnDelay: 1.03
     startMaxEnemiesOnScreen: 8
-    startSpawnDelay: 2
-    startSpawnAmount: 3
-    maxEnemiesIncrease: 0.1
-    spawnAmountIncrease: 0.15
+    startSpawnDelay: 3
+    startSpawnAmount: 2
+    maxEnemiesIncrease: 0.05
+    spawnAmountIncrease: 0.05
     baseHealth: 1
     baseSpeed: 5
   EnemyExplosion:
@@ -45,7 +45,7 @@ MonoBehaviour:
     spawnDelay: 1.2
     spawnDelayRandomness: 0.3
   StaminaHandler:
-    maxStamina: 1
+    maxStamina: 2.5
     costPerSecond: 0.5
     regenPerSecond: 0.4
     regenDelay: 2
