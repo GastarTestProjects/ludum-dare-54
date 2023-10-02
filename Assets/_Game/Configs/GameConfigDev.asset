@@ -40,6 +40,7 @@ MonoBehaviour:
     baseSpeed: 3
   EnemyExplosion:
     lifeTime: 1
+    explosion: {fileID: 8300000, guid: f985759f28827514380bc218cecbcf1b, type: 3}
   EnemySpawnPoint:
     spawnDelay: 1.2
     spawnDelayRandomness: 0.3

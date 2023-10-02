@@ -8,16 +8,19 @@ namespace _Game.Scripts.Effects
     {
         [SerializeField] private ParticleSystem _particleSystem;
         [SerializeField] private ParticleSystem _particleSystemKilled;
+        [SerializeField] private AudioSource audioSource;
         
         private IMemoryPool _pool;
         private float _lifeTime;
 
         private float _despawnTime;
-        
-        
+        private Config _config;
+
+
         [Inject]
         private void Construct(Config config)
         {
+            _config = config;
             _lifeTime = config.lifeTime;
         }
 
@@ -54,12 +57,15 @@ namespace _Game.Scripts.Effects
                 _particleSystem.gameObject.SetActive(true);
                 _particleSystem.Play();
             }
+            
+            audioSource.PlayOneShot(_config.explosion);
         }
 
         [Serializable]
         public class Config
         {
             public float lifeTime = 1;
+            public AudioClip explosion;
         }
         
         public class Factory : PlaceholderFactory<EnemyExplosionParams, EnemyExplosion>

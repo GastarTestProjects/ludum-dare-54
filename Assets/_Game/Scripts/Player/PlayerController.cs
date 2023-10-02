@@ -1,5 +1,6 @@
 using _Game.Scripts.Enemies;
 using System;
+using _Game.Scripts.Game.Events;
 using _Game.Scripts.Game.Models;
 using UniRx;
 using UnityEngine;
@@ -108,6 +109,11 @@ namespace _Game.Scripts.Player
 
         private void PlayMovementSounds()
         {
+            if (Time.timeScale == 0)
+            {
+                frictionAudioSource.Pause();
+                return;
+            }
             var currentHorizontalSpeed = Vector3.ProjectOnPlane(playerRigidbody.velocity, Vector3.up).magnitude;
             const float maxVolSpeedThreshold = 6f;
             const float minVolSpeedThreshold = 1f;
