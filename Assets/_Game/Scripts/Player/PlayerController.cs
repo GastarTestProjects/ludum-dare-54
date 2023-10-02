@@ -1,6 +1,7 @@
 using _Game.Scripts.Enemies;
 using System;
 using _Game.Scripts.Game.Models;
+using UniRx;
 using UnityEngine;
 using Zenject;
 using Random = UnityEngine.Random;
@@ -19,6 +20,7 @@ namespace _Game.Scripts.Player
         [SerializeField] private Transform playerVisuals;
         [SerializeField] private PlayerWeapon weapon;
         [SerializeField] private PlayerAnimations animations;
+        [SerializeField] private PlayerHud hud;
         [Header("Sound")]
         [SerializeField] private AudioSource shotAudioSource;
         [SerializeField] private AudioClip shotAudioClip;
@@ -26,7 +28,7 @@ namespace _Game.Scripts.Player
 
         private Config _config;
         private bool _isDead;
-        private int _currentHealth;
+        private ReactiveProperty<int> _currentHealth = new();
         private float _currentShootCooldown;
         private PlayerInput _playerInput;
         [Inject]
@@ -67,10 +69,12 @@ namespace _Game.Scripts.Player
 
         private void Initialize()
         {
-            _currentHealth = _config.MaxHealth;
+            _currentHealth.Value = _config.MaxHealth;
             _isDead = false;
             animations.SetDefaultRigPointsState();
             _signalBus.Fire<PlayerInitializedEvent>();
+            hud.SetHpMax(_config.MaxHealth);
+            _currentHealth.Subscribe(hud.SetHp);
         }
 
         private void RotateVisuals()
@@ -114,7 +118,7 @@ namespace _Game.Scripts.Player
 
         private void CheckHealth()
         {
-            if (_currentHealth > 0)
+            if (_currentHealth.Value > 0)
                 return;
             if (!_isDead)
             {
@@ -180,9 +184,11 @@ namespace _Game.Scripts.Player
 
         public void TakeDamage(int damage)
         {
+            Debug.Log("Player took damage");
             if (_staminaHandler.IsHiding)
                 return; // TODO: Sound?
-            _currentHealth -= damage;
+            _currentHealth.Value = _currentHealth.Value - damage;
+            Debug.Log("Damage taken");
             // _signalBus.Fire(new PlayerTookDamageEvent(_currentHealth));
         }
 

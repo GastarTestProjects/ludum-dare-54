@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using _Game.Scripts.Effects;
+using _Game.Scripts.Player;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -19,10 +20,12 @@ namespace _Game.Scripts.Enemies
 
         private Vector3 _defaultAimScale;
         private Vector3 _defaultAimRotation;
+        private PlayerController _player;
 
         [Inject]
-        private void Construct(Config config, EnemyExplosion.Factory explosionFactory)
+        private void Construct(Config config, PlayerController player, EnemyExplosion.Factory explosionFactory)
         {
+            _player = player;
             _explosionFactory = explosionFactory;
             _config = config;
             _defaultAimScale = aimSpot.transform.localScale;
@@ -31,13 +34,11 @@ namespace _Game.Scripts.Enemies
         
         public void OnDespawned()
         {
-            Debug.Log("Despawn bomb");
             _pool = null;
         }
 
         public void OnSpawned(IMemoryPool pool)
         {
-            Debug.Log("Spawn bomb");
             _pool = pool;
             aimSpot.enabled = true;
             bombObject.gameObject.SetActive(false);
@@ -88,6 +89,11 @@ namespace _Game.Scripts.Enemies
             var explosion = _explosionFactory.Create(new EnemyExplosionParams(false));
             explosion.transform.position = bombObject.transform.position;
             bombObject.gameObject.SetActive(false);
+            if (Vector3.Distance(_player.transform.position, bombObject.transform.position) <=
+                _config.explosionDamageDistance)
+            {
+                _player.TakeDamage((int) _config.damage);
+            }
             
             _pool.Despawn(this);
         }
@@ -97,6 +103,8 @@ namespace _Game.Scripts.Enemies
         {
             public float delayBeforeBombDrop = 2f;
             public float bombElevation = 10f;
+            public float explosionDamageDistance = 2.5f;
+            public float damage = 20f;
         }
         
         public class Factory : PlaceholderFactory<Bomb>

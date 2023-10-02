@@ -109,7 +109,7 @@ namespace _Game.Scripts.Enemies
 
             if (!killed &&
                 Vector3.Distance(_playerTransform.position, enemyAgent.transform.position) <=
-                _config.explosionDistance)
+                _config.explosionDistance * 1.2)
             {
                 _player.TakeDamage(_initParams.Damage);
             }
