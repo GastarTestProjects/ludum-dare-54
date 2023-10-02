@@ -3,6 +3,7 @@ using System;
 using _Game.Scripts.Game.Models;
 using UniRx;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Zenject;
 using Random = UnityEngine.Random;
 
@@ -21,9 +22,18 @@ namespace _Game.Scripts.Player
         [SerializeField] private PlayerWeapon weapon;
         [SerializeField] private PlayerAnimations animations;
         [SerializeField] private PlayerHud hud;
+
         [Header("Sound")]
+        [SerializeField] private AudioSource hideAudioSource;
+        [SerializeField] private AudioClip hideAudioClip;
+        [SerializeField] private AudioClip unHideAudioClip;
+        [Space]
+        [SerializeField] private AudioSource damageAudioSource;
+        [SerializeField] private AudioClip damageAudioClip;
+        [Space]
         [SerializeField] private AudioSource shotAudioSource;
         [SerializeField] private AudioClip shotAudioClip;
+        [Space]
         [SerializeField] private AudioSource frictionAudioSource;
 
         private Config _config;
@@ -175,21 +185,21 @@ namespace _Game.Scripts.Player
         {
             animations.AnimateHide();
             playerRigidbody.velocity *= _config.HideSpeedMultiplier;
+            hideAudioSource.PlayOneShot(hideAudioClip);
         }
 
         public void Unhide()
         {
             animations.AnimateUnHide();
+            hideAudioSource.PlayOneShot(unHideAudioClip);
         }
 
         public void TakeDamage(int damage)
         {
-            Debug.Log("Player took damage");
             if (_staminaHandler.IsHiding)
-                return; // TODO: Sound?
-            _currentHealth.Value = _currentHealth.Value - damage;
-            Debug.Log("Damage taken");
-            // _signalBus.Fire(new PlayerTookDamageEvent(_currentHealth));
+                return;
+            _currentHealth.Value -= damage;
+            damageAudioSource.PlayOneShot(damageAudioClip);
         }
 
         [Serializable]
