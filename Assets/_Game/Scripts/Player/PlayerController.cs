@@ -11,12 +11,6 @@ namespace _Game.Scripts.Player
     {
         [Header("Settings")]
         [SerializeField] private bool isDebug;
-        [SerializeField] private float shootCooldown = 0.5f;
-        [SerializeField] private float shootForceMultiplier = 10f;
-        [SerializeField] private int maxHealth = 100;
-        [SerializeField] private float shotDistance = 10;
-        [SerializeField] private float shotAngle = 30;
-        [SerializeField] private int damage = 5;
 
         [Header("Refs")]
         [SerializeField] private GameObject mouseTargetDebugObj;
@@ -28,8 +22,8 @@ namespace _Game.Scripts.Player
         [SerializeField] private AudioSource shotAudioSource;
         [SerializeField] private AudioClip shotAudioClip;
         [SerializeField] private AudioSource frictionAudioSource;
-        [SerializeField] private AudioClip frictionAudioClip;
 
+        private Config _config;
         private bool _isDead;
         private int _currentHealth;
         private float _currentShootCooldown;
@@ -43,12 +37,14 @@ namespace _Game.Scripts.Player
 
         [Inject]
         private void Construct(
+            Config config,
             PlayerInput playerInput,
             OtherInput otherInput,
             EnemyRegistry enemyRegistry,
             StaminaHandler staminaHandler
         )
         {
+            _config = config;
             _staminaHandler = staminaHandler;
             _enemyRegistry = enemyRegistry;
             _playerInput = playerInput;
@@ -72,7 +68,7 @@ namespace _Game.Scripts.Player
 
         private void Initialize()
         {
-            _currentHealth = maxHealth;
+            _currentHealth = _config.MaxHealth;
             _isDead = false;
             animations.SetDefaultRigPointsState();
             _signalBus.Fire<PlayerInitializedEvent>();
@@ -140,8 +136,8 @@ namespace _Game.Scripts.Player
 
         private void Shoot()
         {
-            _currentShootCooldown = shootCooldown;
-            weapon.Shoot(playerRigidbody, shootForceMultiplier);
+            _currentShootCooldown = _config.ShootCooldown;
+            weapon.Shoot(playerRigidbody, _config.ShootForceMultiplier);
             animations.PlayShootAnimation();
 
             // sound
@@ -159,14 +155,14 @@ namespace _Game.Scripts.Player
             {
                 var enemy = _enemyRegistry.Enemies[i];
                 var distance = Vector3.Distance(enemy.transform.position, transform.position);
-                if (distance > shotDistance)
+                if (distance > _config.ShotDistance)
                     continue;
                 var angle = Vector3.Angle(
                     enemy.transform.position - transform.position,
                     playerVisuals.forward);
-                if (angle > shotAngle)
+                if (angle > _config.ShotAngle)
                     continue;
-                enemy.TakeDamage(damage);
+                enemy.TakeDamage(_config.Damage);
             }
         }
 
@@ -174,7 +170,7 @@ namespace _Game.Scripts.Player
         public void Hide()
         {
             animations.AnimateHide();
-            playerRigidbody.velocity *= 1.5f;
+            playerRigidbody.velocity *= _config.HideSpeedMultiplier;
         }
 
         public void Unhide()
@@ -188,6 +184,18 @@ namespace _Game.Scripts.Player
                 return; // TODO: Sound?
             _currentHealth -= damage;
             // _signalBus.Fire(new PlayerTookDamageEvent(_currentHealth));
+        }
+
+        [Serializable]
+        public class Config
+        {
+            [field: SerializeField] public float ShootCooldown { get; private set; } = 0.5f;
+            [field: SerializeField] public float ShootForceMultiplier { get; private set; } = 1000f;
+            [field: SerializeField] public int MaxHealth { get; private set; } = 100;
+            [field: SerializeField] public float ShotDistance { get; private set; } = 10;
+            [field: SerializeField] public float ShotAngle { get; private set; } = 30;
+            [field: SerializeField] public int Damage { get; private set; } = 5;
+            [field: SerializeField] public float HideSpeedMultiplier { get; set; } = 1.5f;
         }
     }
 }

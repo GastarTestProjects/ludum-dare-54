@@ -19,6 +19,14 @@ MonoBehaviour:
       type: 3}
     enemySpawnPointPrefab: {fileID: 6062231844647329877, guid: 755eec4f84a12cc468d776ba5e5b4dff,
       type: 3}
+  PlayerController:
+    <ShootCooldown>k__BackingField: 0.5
+    <ShootForceMultiplier>k__BackingField: 1000
+    <MaxHealth>k__BackingField: 100
+    <ShotDistance>k__BackingField: 10
+    <ShotAngle>k__BackingField: 30
+    <Damage>k__BackingField: 5
+    <HideSpeedMultiplier>k__BackingField: 1.5
   EnemySpawner:
     firstSpawnDelay: 1
     startMaxEnemiesOnScreen: 8
@@ -38,7 +46,7 @@ MonoBehaviour:
     costPerSecond: 0.5
     regenPerSecond: 0.2
     regenDelay: 5
-    minDurationAmount: 0.5
+    minDurationAmount: 1
   BombSpawner:
     bombSpawnDelay: 6
     bombSpawnDelayRandomness: 1

@@ -10,6 +10,7 @@ namespace _Game.Scripts.Installers
     public class GameConfigInstaller: ScriptableObjectInstaller<GameConfigInstaller>
     {
         public GameInstaller.Config GameInstaller;
+        public PlayerController.Config PlayerController;
         public EnemySpawner.Config EnemySpawner;
         public EnemyExplosion.Config EnemyExplosion;
         public EnemySpawnPoint.Config EnemySpawnPoint;
@@ -21,6 +22,7 @@ namespace _Game.Scripts.Installers
         public override void InstallBindings()
         {
             Container.BindInstance(GameInstaller).IfNotBound();
+            Container.BindInstance(PlayerController).IfNotBound();
             Container.BindInstance(EnemySpawner).IfNotBound();
             Container.BindInstance(EnemyExplosion).IfNotBound();
             Container.BindInstance(EnemySpawnPoint).IfNotBound();
