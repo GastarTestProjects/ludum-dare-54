@@ -8,7 +8,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Game/Scenes/CharacterControllerDev.unity
     guid: 3e81ae130f68b4fb580ff169598859c3
-  - enabled: 1
-    path: Assets/_Game/Scenes/SpawnerTestScene.unity
-    guid: 97997eb7583b6504ab49e9474f38a592
   m_configObjects: {}

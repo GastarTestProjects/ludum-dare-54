@@ -13,6 +13,7 @@ namespace _Game.Scripts.Player
         [SerializeField] private bool isDebug;
 
         [Header("Refs")]
+        [SerializeField] private Camera mainCam;
         [SerializeField] private GameObject mouseTargetDebugObj;
         [SerializeField] private Rigidbody playerRigidbody;
         [SerializeField] private Transform playerVisuals;
@@ -30,7 +31,6 @@ namespace _Game.Scripts.Player
         private PlayerInput _playerInput;
         [Inject]
         private SignalBus _signalBus;
-        private Camera _camera;
         private Plane _targetPlane = new(Vector3.up, 0);
         private EnemyRegistry _enemyRegistry;
         private StaminaHandler _staminaHandler;
@@ -48,7 +48,6 @@ namespace _Game.Scripts.Player
             _staminaHandler = staminaHandler;
             _enemyRegistry = enemyRegistry;
             _playerInput = playerInput;
-            _camera = Camera.main;
             Initialize();
         }
 
@@ -76,7 +75,7 @@ namespace _Game.Scripts.Player
 
         private void RotateVisuals()
         {
-            var ray = _camera.ScreenPointToRay(_playerInput.mousePosition);
+            var ray = mainCam.ScreenPointToRay(_playerInput.mousePosition);
             var worldPosition = Vector3.zero;
             if (_targetPlane.Raycast(ray, out var distance))
                 worldPosition = ray.GetPoint(distance);
