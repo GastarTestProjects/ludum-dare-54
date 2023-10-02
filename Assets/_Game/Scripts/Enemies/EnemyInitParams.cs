@@ -4,7 +4,7 @@
     {
         public float Health;
         public float Speed;
-        public int Damage = 5;
+        public int Damage = 10;
         // public float ExplosionDistance = 2f;
         // public float AttackExplosionDelay = 0.2f;
         
