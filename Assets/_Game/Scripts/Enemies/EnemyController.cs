@@ -80,26 +80,27 @@ namespace _Game.Scripts.Enemies
         private IEnumerator Attack()
         {
             yield return new WaitForSeconds(_initParams.AttackExplosionDelay);
-            Die();
+            Die(false);
         }
         
         public void TakeDamage(int damage)
         {
             _health -= damage;
             if (_health <= 0)
-                Die();
+                Die(true);
         }
         
-        private void Die()
+        private void Die(bool killed)
         {
             StopAllCoroutines();
             if (_pool == null)
                 return;
             _pool.Despawn(this);
-            var explosion = _explosionFactory.Create(new EnemyExplosionParams());
+            var explosion = _explosionFactory.Create(new EnemyExplosionParams(killed));
             explosion.transform.position = transform.position;
-            
-            if (Vector3.Distance(_playerTransform.position, enemyAgent.transform.position) <=
+
+            if (!killed &&
+                Vector3.Distance(_playerTransform.position, enemyAgent.transform.position) <=
                 _initParams.ExplosionDistance)
             {
                 _player.TakeDamage(_initParams.Damage);
