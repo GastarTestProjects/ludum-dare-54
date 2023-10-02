@@ -45,6 +45,7 @@ namespace _Game.Scripts.Game.UI
 
         private void ShowElements(bool playerDied, float playerTime)
         {
+            continueButton.gameObject.SetActive(!playerDied);
             pauseTxt.gameObject.SetActive(!playerDied);
             playerDiedTxt.gameObject.SetActive(playerDied);
             playerDiedInfoContainer.gameObject.SetActive(playerDied);

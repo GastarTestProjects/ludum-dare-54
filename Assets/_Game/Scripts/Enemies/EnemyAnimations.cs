@@ -2,6 +2,8 @@
 using Animancer;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
+using Zenject;
 
 namespace _Game.Scripts.Enemies
 {
@@ -14,8 +16,14 @@ namespace _Game.Scripts.Enemies
         [SerializeField] private ClipTransition attackAnimation;
 
         private bool _attacking;
+        private Config _config;
 
-
+        [Inject]
+        private void Construct(Config config)
+        {
+            _config = config;
+        }
+        
         private void OnEnable()
         {
             _attacking = false;
@@ -27,7 +35,7 @@ namespace _Game.Scripts.Enemies
                 return;
             if (agent.velocity.magnitude > 0.01f)
             {
-                walkAnimation.Speed = agent.velocity.magnitude / 2;
+                walkAnimation.Speed = agent.velocity.magnitude / _config.animationSpeedDivider;
                 animancerComponent.Play(walkAnimation);
             }
             else
@@ -40,6 +48,12 @@ namespace _Game.Scripts.Enemies
         {
             _attacking = true;
             animancerComponent.Play(attackAnimation);
+        }
+
+        [Serializable]
+        public class Config
+        {
+            public float animationSpeedDivider = 2f;
         }
     }
 }

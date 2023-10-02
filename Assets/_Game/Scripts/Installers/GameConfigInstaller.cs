@@ -18,6 +18,7 @@ namespace _Game.Scripts.Installers
         public BombSpawner.Config BombSpawner;
         public Bomb.Config Bomb;
         public EnemyController.Config EnemyController;
+        public EnemyAnimations.Config EnemyAnimations;
         
         
         public override void InstallBindings()
@@ -31,6 +32,7 @@ namespace _Game.Scripts.Installers
             Container.BindInstance(BombSpawner).IfNotBound();
             Container.BindInstance(Bomb).IfNotBound();
             Container.BindInstance(EnemyController).IfNotBound();
+            Container.BindInstance(EnemyAnimations).IfNotBound();
         }
     }
 }

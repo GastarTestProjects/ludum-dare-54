@@ -60,3 +60,5 @@ MonoBehaviour:
   EnemyController:
     explosionDistance: 2
     attackExplosionDelay: 0.2
+  EnemyAnimations:
+    animationSpeedDivider: 2.5
