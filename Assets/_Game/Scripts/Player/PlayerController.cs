@@ -40,61 +40,43 @@ namespace _Game.Scripts.Player
         private SignalBus _signalBus;
         private Camera _camera;
         private Plane _targetPlane = new(Vector3.up, 0);
-        private Vector3 _surfaceNormal;
-        private bool _isGrounded;
         private EnemyRegistry _enemyRegistry;
         private StaminaHandler _staminaHandler;
 
         [Inject]
-        private void Construct(PlayerInput playerInput, OtherInput otherInput, EnemyRegistry enemyRegistry,
-            StaminaHandler staminaHandler)
+        private void Construct(
+            PlayerInput playerInput,
+            OtherInput otherInput,
+            EnemyRegistry enemyRegistry,
+            StaminaHandler staminaHandler
+        )
         {
             _staminaHandler = staminaHandler;
             _enemyRegistry = enemyRegistry;
             _playerInput = playerInput;
             _camera = Camera.main;
-            animations.PlayIdleAnimation();
             Initialize();
         }
 
         private void Update()
         {
+            PlayMovementSounds();
             CheckHealth();
-            ProcessMovement();
             if (_isDead)
-            {
                 return;
-            }
 
             RotateVisuals();
-            var shootCooldownPassed = CheckShootCooldown();
-            if (_playerInput.mousePressed && shootCooldownPassed)
+            if (IsShootAllowed())
                 Shoot();
             else
                 animations.PlayIdleAnimation();
-        }
-
-        private void OnCollisionStay(Collision collision)
-        {
-            // don't know if we even need this
-
-            var innerIsGrounded = false;
-            // foreach (var contact in collision.contacts)
-            // {
-            //     if (contact.otherCollider.gameObject == ground.gameObject)
-            //     {
-            //         _surfaceNormal = contact.normal;
-            //         innerIsGrounded = true;
-            //     }
-            // }
-            _isGrounded = innerIsGrounded;
         }
 
         private void Initialize()
         {
             _currentHealth = maxHealth;
             _isDead = false;
-            animations.PlayIdleAnimation();
+            animations.SetDefaultRigPointsState();
             _signalBus.Fire<PlayerInitializedEvent>();
         }
 
@@ -112,14 +94,11 @@ namespace _Game.Scripts.Player
             var forward = worldPosition - transform.position;
             forward = Vector3.ProjectOnPlane(forward, Vector3.up);
 
-            if (_isGrounded)
-                up = _surfaceNormal;
-
             var targetRotation = Quaternion.LookRotation(forward, up);
             playerVisuals.rotation = Quaternion.Slerp(playerVisuals.rotation, targetRotation, Time.deltaTime * 10f);
         }
 
-        private void ProcessMovement()
+        private void PlayMovementSounds()
         {
             var currentHorizontalSpeed = Vector3.ProjectOnPlane(playerRigidbody.velocity, Vector3.up).magnitude;
             const float maxVolSpeedThreshold = 6f;
@@ -137,18 +116,6 @@ namespace _Game.Scripts.Player
                 if (!frictionAudioSource.isPlaying)
                     frictionAudioSource.Play();
             }
-            // Debug.Log($"Horizontal Speed: {currentHorizontalSpeed}");
-
-            // if (currentHorizontalSpeed > .5f)
-            // {
-            //     if (!frictionAudioSource.isPlaying)
-            //         frictionAudioSource.Play();
-            // }
-            // else
-            // {
-            //     if (frictionAudioSource.isPlaying)
-            //         frictionAudioSource.Pause();
-            // }
         }
 
         private void CheckHealth()
@@ -162,7 +129,7 @@ namespace _Game.Scripts.Player
             }
         }
 
-        private bool CheckShootCooldown()
+        private bool IsShootAllowed()
         {
             if (_currentShootCooldown > 0)
             {
@@ -170,14 +137,11 @@ namespace _Game.Scripts.Player
                 return false;
             }
 
-            return true;
+            return !_staminaHandler.IsHiding && _playerInput.mousePressed;
         }
 
         private void Shoot()
         {
-            if (_staminaHandler.IsHiding)
-                return;
-            
             _currentShootCooldown = shootCooldown;
             weapon.Shoot(playerRigidbody, shootForceMultiplier);
             animations.PlayShootAnimation();
@@ -187,7 +151,7 @@ namespace _Game.Scripts.Player
             var pitch = Random.Range(.9f, 1.1f);
             shotAudioSource.pitch = pitch;
             shotAudioSource.PlayOneShot(shotAudioClip, volume);
-            
+
             DamageEnemies();
         }
 
@@ -207,8 +171,8 @@ namespace _Game.Scripts.Player
                 enemy.TakeDamage(damage);
             }
         }
-        
-        
+
+
         public void Hide()
         {
             animations.AnimateHide();
