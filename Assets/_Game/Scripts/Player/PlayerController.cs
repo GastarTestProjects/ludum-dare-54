@@ -19,8 +19,6 @@ namespace _Game.Scripts.Player
         [SerializeField] private int damage = 5;
 
         [Header("Refs")]
-        [SerializeField] private Transform cauldron;
-        [SerializeField] private GameObject ground;
         [SerializeField] private GameObject mouseTargetDebugObj;
         [SerializeField] private Rigidbody playerRigidbody;
         [SerializeField] private Transform playerVisuals;
@@ -175,11 +173,13 @@ namespace _Game.Scripts.Player
 
         public void Hide()
         {
+            Debug.Log("Hide");
             animations.AnimateHide();
         }
 
         public void Unhide()
         {
+            Debug.Log("UN Hide");
             animations.AnimateUnHide();
         }
 
