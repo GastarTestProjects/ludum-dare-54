@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Animancer;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Game.Scripts.Player
 {
@@ -14,11 +15,18 @@ namespace _Game.Scripts.Player
         [SerializeField] private ClipTransition idleAnimation;
 
         [SerializeField] private List<RigPointsBinding> recoilPoints;
+        [SerializeField] private List<RigPointsBinding> hidePoints;
         private bool _isInitDefaultRecoilPoints;
 
-        private void InitDefaultRecoilPoints()
+        private void InitDefaultRigPoints()
         {
             recoilPoints.ForEach(
+                points =>
+                {
+                    points.defaultLocalPosition = points.rigPoint.localPosition;
+                    points.defaultLocalRotation = points.rigPoint.localRotation;
+                });
+            hidePoints.ForEach(
                 points =>
                 {
                     points.defaultLocalPosition = points.rigPoint.localPosition;
@@ -30,13 +38,17 @@ namespace _Game.Scripts.Player
         public void PlayShootAnimation()
         {
             if (!_isInitDefaultRecoilPoints)
-                InitDefaultRecoilPoints();
+                InitDefaultRigPoints();
+
+            foreach (var points in recoilPoints)
+                points.rigPoint.DOKill();
+
             const float duration = .13f;
             foreach (var points in recoilPoints)
             {
                 // randomly select a recoil point
-                var randomIndex = UnityEngine.Random.Range(0, points.recoilPoints.Count);
-                var recoilPoint = points.recoilPoints[randomIndex];
+                var randomIndex = UnityEngine.Random.Range(0, points.customTargetPoints.Count);
+                var recoilPoint = points.customTargetPoints[randomIndex];
 
                 points.rigPoint.DOLocalMove(recoilPoint.localPosition, duration)
                     .SetEase(Ease.OutQuad)
@@ -59,14 +71,64 @@ namespace _Game.Scripts.Player
         {
             animancerComponent.Play(idleAnimation);
         }
+
+        public void AnimateHide()
+        {
+            foreach (var points in hidePoints)
+                points.rigPoint.DOKill();
+
+            const float duration = .13f;
+            foreach (var points in hidePoints)
+            {
+                points.rigPoint.DOLocalMove(points.customTargetPoints[0].localPosition, duration)
+                    .SetEase(Ease.OutQuad);
+                points.rigPoint.DOLocalRotateQuaternion(points.customTargetPoints[0].localRotation, duration);
+            }
+        }
+
+        public void AnimateUnHide()
+        {
+            foreach (var points in hidePoints)
+                points.rigPoint.DOKill();
+
+            const float duration = .35f;
+            foreach (var points in hidePoints)
+            {
+                points.rigPoint.DOLocalMove(points.defaultLocalPosition, duration)
+                    .SetEase(Ease.OutQuad);
+                points.rigPoint.DOLocalRotateQuaternion(points.defaultLocalRotation, duration);
+            }
+        }
+
+        public void SetDefaultRigPointsState()
+        {
+            if (!_isInitDefaultRecoilPoints)
+                InitDefaultRigPoints();
+            foreach (var points in recoilPoints)
+                points.rigPoint.DOKill();
+            foreach (var points in hidePoints)
+                points.rigPoint.DOKill();
+
+            foreach (var points in recoilPoints)
+            {
+                points.rigPoint.localPosition = points.defaultLocalPosition;
+                points.rigPoint.localRotation = points.defaultLocalRotation;
+            }
+
+            foreach (var points in hidePoints)
+            {
+                points.rigPoint.localPosition = points.defaultLocalPosition;
+                points.rigPoint.localRotation = points.defaultLocalRotation;
+            }
+        }
     }
 
     [Serializable]
     public class RigPointsBinding
     {
+        [HideInInspector] public Vector3 defaultLocalPosition;
+        [HideInInspector] public Quaternion defaultLocalRotation;
         public Transform rigPoint;
-        public Vector3 defaultLocalPosition;
-        public Quaternion defaultLocalRotation;
-        public List<Transform> recoilPoints;
+        public List<Transform> customTargetPoints;
     }
 }
