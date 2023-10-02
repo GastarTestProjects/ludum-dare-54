@@ -30539,7 +30539,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animations: {fileID: 7920937553526480238}
   enemyAgent: {fileID: 5727615880709187740}
-  audioSource: {fileID: 6517795381656015930}
 --- !u!195 &5727615880709187740
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -30657,7 +30656,7 @@ CapsuleCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0

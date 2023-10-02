@@ -67,12 +67,15 @@ namespace _Game.Scripts.Enemies
         // TODO: avoid spawning enemies close to each other
         private Vector3 GetRandomSpawnPosition()
         {
-            var spawnPosition = new Vector3(
-                UnityEngine.Random.Range(spawnArea.bounds.min.x, spawnArea.bounds.max.x),
-                spawnArea.bounds.min.y,
-                UnityEngine.Random.Range(spawnArea.bounds.min.z, spawnArea.bounds.max.z)
-            );
-            return spawnPosition;
+            // var spawnPosition = new Vector3(
+            //     UnityEngine.Random.Range(spawnArea.bounds.min.x, spawnArea.bounds.max.x),
+            //     spawnArea.bounds.min.y,
+            //     UnityEngine.Random.Range(spawnArea.bounds.min.z, spawnArea.bounds.max.z)
+            // );
+            
+            var spawnPosition = UnityEngine.Random.insideUnitCircle.normalized * 14;
+            var spawnPosition3D = new Vector3(spawnPosition.x, 4f, spawnPosition.y);
+            return spawnPosition3D;
         }
 
         private void OnSpawnPointFinish(EnemySpawnPoint spawnPoint)

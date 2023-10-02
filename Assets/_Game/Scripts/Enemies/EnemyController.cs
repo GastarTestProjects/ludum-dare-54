@@ -31,6 +31,9 @@ namespace _Game.Scripts.Enemies
         private bool attacking;
 
         // private float attackEndTime;
+        
+        [Inject]
+        private SignalBus _signalBus;
 
         [Inject]
         private void Construct(Config config,
@@ -107,12 +110,13 @@ namespace _Game.Scripts.Enemies
             var explosion = _explosionFactory.Create(new EnemyExplosionParams(killed));
             explosion.transform.position = transform.position;
 
-            if (!killed &&
-                Vector3.Distance(_playerTransform.position, enemyAgent.transform.position) <=
+            if (Vector3.Distance(_playerTransform.position, enemyAgent.transform.position) <=
                 _config.explosionDistance * 1.2)
             {
-                _player.TakeDamage(_initParams.Damage);
+                _player.TakeDamage(killed ? (_initParams.Damage / 2) : _initParams.Damage);
             }
+            
+            _signalBus.Fire(new EnemyDiedEvent(killed));
         }
 
         private void OnCollisionEnter(Collision other)

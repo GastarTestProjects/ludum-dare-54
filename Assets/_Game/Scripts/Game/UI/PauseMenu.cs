@@ -1,7 +1,6 @@
 using _Game.Scripts.Game.Events;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Zenject;
 
@@ -23,10 +22,12 @@ namespace _Game.Scripts.Game.UI
         [SerializeField] private Button mainMenuButton;
         
         private GameController _gameController;
+        private ScoreHandler _scoreHandler;
 
         [Inject]
-        private void Construct(SignalBus signalBus, GameController gameController)
+        private void Construct(SignalBus signalBus, GameController gameController, ScoreHandler scoreHandler)
         {
+            _scoreHandler = scoreHandler;
             pauseMenu.SetActive(false);
             
             _gameController = gameController;
@@ -49,7 +50,12 @@ namespace _Game.Scripts.Game.UI
             pauseTxt.gameObject.SetActive(!playerDied);
             playerDiedTxt.gameObject.SetActive(playerDied);
             playerDiedInfoContainer.gameObject.SetActive(playerDied);
-            playerRecordTxt.text = $"Your time: {playerTime}";
+            playerRecordTxt.text = $"Your score: {_scoreHandler.CurrentScore}";
+            var recordScore = _scoreHandler.RecordScore;
+            if (recordScore > 0)
+            {
+                playerRecordTxt.text += $"  Record score: {recordScore}";
+            }
         }
 
         private void SubscribeButtons()

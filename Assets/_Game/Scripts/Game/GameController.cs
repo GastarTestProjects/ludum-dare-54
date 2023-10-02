@@ -11,10 +11,13 @@ namespace _Game.Scripts.Game
     {
         private OtherInput _otherInput;
         private SignalBus _signalBus;
+        
+        private bool _playerDied;
 
         [Inject]
         private void Construct(OtherInput otherInput, SignalBus signalBus)
         {
+            _playerDied = false;
             _signalBus = signalBus;
             _otherInput = otherInput;
             signalBus.Subscribe<PlayerDiedEvent>(OnPlayerDied);
@@ -22,7 +25,7 @@ namespace _Game.Scripts.Game
 
         private void Update()
         {
-            if (_otherInput.pausePressed)
+            if (_otherInput.pausePressed && !_playerDied)
             {
                 if (Time.timeScale == 0)
                     Unpause();
@@ -43,6 +46,7 @@ namespace _Game.Scripts.Game
             Debug.Log("Unpause pressed");
             Time.timeScale = 1;
             _signalBus.Fire(new PauseEvent(false, false));
+            _playerDied = false;
         }
 
         public void OpenMainMenu()
@@ -53,6 +57,7 @@ namespace _Game.Scripts.Game
 
         public void RestartGame()
         {
+            _playerDied = false;
             Time.timeScale = 1f;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
@@ -60,6 +65,7 @@ namespace _Game.Scripts.Game
         private void OnPlayerDied(PlayerDiedEvent playerDiedEvent)
         {
             Debug.Log("Player died");
+            _playerDied = true;
             Time.timeScale = 0;
             _signalBus.Fire(new PauseEvent(true, true));
         }
