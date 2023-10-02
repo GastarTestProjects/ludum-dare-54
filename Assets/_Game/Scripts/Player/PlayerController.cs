@@ -135,7 +135,7 @@ namespace _Game.Scripts.Player
                 return false;
             }
 
-            return !_staminaHandler.IsHiding && _playerInput.mousePressed;
+            return !_staminaHandler.IsHiding && _playerInput.mousePressed && !animations.IsInHiddenState;
         }
 
         private void Shoot()

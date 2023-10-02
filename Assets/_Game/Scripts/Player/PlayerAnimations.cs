@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using Animancer;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace _Game.Scripts.Player
 {
     public class PlayerAnimations : MonoBehaviour
     {
+        public bool IsInHiddenState { get; private set; }
         [SerializeField] private Transform shotParticlesSpawnPoint;
         [SerializeField] private GameObject shotParticlesPrefab;
         [SerializeField] private AnimancerComponent animancerComponent;
@@ -78,6 +78,7 @@ namespace _Game.Scripts.Player
                 points.rigPoint.DOKill();
 
             const float duration = .13f;
+            IsInHiddenState = true;
             foreach (var points in hidePoints)
             {
                 points.rigPoint.DOLocalMove(points.customTargetPoints[0].localPosition, duration)
@@ -95,7 +96,8 @@ namespace _Game.Scripts.Player
             foreach (var points in hidePoints)
             {
                 points.rigPoint.DOLocalMove(points.defaultLocalPosition, duration)
-                    .SetEase(Ease.OutQuad);
+                    .SetEase(Ease.OutQuad)
+                    .OnComplete(() => IsInHiddenState = false);
                 points.rigPoint.DOLocalRotateQuaternion(points.defaultLocalRotation, duration);
             }
         }
@@ -104,6 +106,7 @@ namespace _Game.Scripts.Player
         {
             if (!_isInitDefaultRecoilPoints)
                 InitDefaultRigPoints();
+            IsInHiddenState = false;
             foreach (var points in recoilPoints)
                 points.rigPoint.DOKill();
             foreach (var points in hidePoints)
