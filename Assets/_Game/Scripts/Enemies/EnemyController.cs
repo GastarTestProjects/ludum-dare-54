@@ -11,6 +11,7 @@ namespace _Game.Scripts.Enemies
 {
     public class EnemyController : MonoBehaviour, IPoolable<EnemyInitParams, IMemoryPool>
     {
+        [SerializeField] private EnemyAnimations animations;
         [SerializeField] private NavMeshAgent enemyAgent;
         
         private EnemyRegistry _registry;
@@ -20,6 +21,7 @@ namespace _Game.Scripts.Enemies
         private EnemyExplosion.Factory _explosionFactory;
         
         private EnemyInitParams _initParams;
+        private Config _config;
 
         private float _health;
         // private float _speed;
@@ -27,13 +29,16 @@ namespace _Game.Scripts.Enemies
 
         // private EnemyBehaviour _behaviour;
         private bool attacking;
+
         // private float attackEndTime;
 
         [Inject]
-        private void Construct(EnemyRegistry registry,
+        private void Construct(Config config,
+            EnemyRegistry registry,
             PlayerController player,
             EnemyExplosion.Factory explosionFactory)
         {
+            _config = config;
             _explosionFactory = explosionFactory;
             _player = player;
             _playerTransform = _player.transform;
@@ -67,19 +72,22 @@ namespace _Game.Scripts.Enemies
                 return;
             
             if (Vector3.Distance(_playerTransform.position, enemyAgent.transform.position) <=
-                _initParams.ExplosionDistance)
+                _config.explosionDistance)
             {
                 StartCoroutine(Attack());
             }
             else
             {
-                enemyAgent.SetDestination(_playerTransform.position);
+                if (enemyAgent.isActiveAndEnabled)
+                    enemyAgent.SetDestination(_playerTransform.position);
             }
         }
 
         private IEnumerator Attack()
         {
-            yield return new WaitForSeconds(_initParams.AttackExplosionDelay);
+            animations.PlayAttackAnimation();
+            enemyAgent.enabled = false;
+            yield return new WaitForSeconds(_config.attackExplosionDelay);
             Die(false);
         }
         
@@ -101,7 +109,7 @@ namespace _Game.Scripts.Enemies
 
             if (!killed &&
                 Vector3.Distance(_playerTransform.position, enemyAgent.transform.position) <=
-                _initParams.ExplosionDistance)
+                _config.explosionDistance)
             {
                 _player.TakeDamage(_initParams.Damage);
             }
@@ -115,6 +123,13 @@ namespace _Game.Scripts.Enemies
                 //Debug.Log("HitSpeed: " + hitSpeed);
                 TakeDamage((int) (hitSpeed / 5));
             }
+        }
+
+        [Serializable]
+        public class Config
+        {
+            public float explosionDistance = 1.5f;
+            public float attackExplosionDelay = 0.2f;
         }
 
 
